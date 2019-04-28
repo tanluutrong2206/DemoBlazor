@@ -1,0 +1,74 @@
+﻿@page "/auth/login"
+@using DemoBlazor.Shared.Authorize
+@inject HttpClient Http
+
+<div class="body">
+    <div class="row">
+        <div class="login-page">
+            <div class="login-box" style="margin-top: 70px;">
+                <div style="display:flex; align-items:center; justify-content:center; margin-bottom:10px">
+                    <label style="font-family:'Roboto', sans-serif;font-weight:bold;margin-left:  10px;font-size: 50px; color:  white">Login Page</label>
+                </div>
+                <div class="card" style="margin: 10px;">
+                    <div class="body" style="padding-top: 25px;">
+                        <div class="input-group">
+                            <span class="input-group-addon">
+                                <i class="material-icons">person</i>
+                            </span>
+                            <div class="form-line">
+                                <input type="email"
+                                       placeholder="Tên đăng nhập"
+                                       class="form-control"
+                                       required
+                                       autofocus
+                                       bind="@Email" />
+                            </div>
+                        </div>
+                        <div class="input-group">
+                            <span class="input-group-addon">
+                                <i class="material-icons">lock</i>
+                            </span>
+                            <div class="form-line">
+                                <input type="password"
+                                       placeholder="Mật khẩu"
+                                       class="form-control"
+                                       required
+                                       bind="@Password" />
+                            </div>
+                        </div>
+                        <div class="row">
+                            <div class="col-xs-6">
+                                <input type="checkbox" name="User.REMEMBER" id="User_REMEMBER" class="filled-in chk-col-pink" checked>
+                                <span style="position:absolute; top: 4px; font-weight:900">&nbsp;&nbsp; Ghi nhớ</span>
+                            </div>
+                            <div class="col-xs-6">
+                                <button class="btn btn-block bg-pink waves-effect"
+                                        type="button"
+                                        onclick="@SubmitForm">
+                                    ĐĂNG NHẬP
+                                </button>
+                            </div>
+                        </div>
+                    </div>
+                </div>
+            </div>
+        </div>
+    </div>
+</div>
+@functions{
+    public string Email { get; set; }
+    public string Password { get; set; }
+    public string Token { get; set; }
+
+    private async Task SubmitForm()
+    {
+        var vm = new TokenViewModel
+        {
+            Email = Email,
+            Password = Password
+        };
+
+        var response = await Http.PostJsonAsync<TokenViewModel>("api/Authorize", vm);
+        Console.WriteLine(response);
+    }
+}

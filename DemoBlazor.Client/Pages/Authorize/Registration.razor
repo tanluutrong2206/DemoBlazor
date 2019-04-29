@@ -1,4 +1,4 @@
-﻿@page "/auth/login"
+﻿@page "/auth/registration"
 @using DemoBlazor.Shared.Authorize
 @inject HttpClient Http
 @inject IUriHelper UriHelper
@@ -10,7 +10,7 @@
             <label style="font-family:'Roboto', sans-serif;font-weight:bold;margin-left:  10px;font-size: 50px; color:  white">Login Page</label>
         </div>
         <EditForm Model="@Model">
-            <DataAnnotationsValidator/>
+            <DataAnnotationsValidator />
             <div class="card" style="margin: 10px;">
                 <div class="body" style="padding-top: 25px;">
                     <div class="input-group">
@@ -18,12 +18,8 @@
                             <i class="material-icons">person</i>
                         </span>
                         <div class="form-line">
-                            <input type="email"
-                                   placeholder="Tên đăng nhập"
-                                   class="form-control"
-                                   required
-                                   autofocus
-                                   bind="@Model.Email" />
+                            <InputText class="form-control"
+                                   bind-Value="@Model.Email" />
                         </div>
                         <ValidationMessage For="@(() => Model.Email)" />
                     </div>
@@ -32,20 +28,37 @@
                             <i class="material-icons">lock</i>
                         </span>
                         <div class="form-line">
-                            <input type="password"
-                                   placeholder="Mật khẩu"
+                            @*<input placeholder="Mật khẩu"
                                    class="form-control"
                                    required
-                                   bind="@Model.Password" />
+                                   type="password"
+                                   bind="@Model.Password" />*@
+                            <InputText class="form-control"
+                                       bind-Value="@Model.Password" />
                         </div>
                         <ValidationMessage For="@(() => Model.Password)" />
+                    </div>
+                    <div class="input-group">
+                        <span class="input-group-addon">
+                            <i class="material-icons">lock</i>
+                        </span>
+                        <div class="form-line">
+                            @*<input placeholder="Nhập lại mật khẩu"
+        class="form-control"
+        required
+        type="password"
+        bind="@Model.ConfirmPassword" />*@
+                            <InputText class="form-control"
+                                       bind-Value="@Model.ConfirmPassword" />
+                        </div>
+                        <ValidationMessage For="@(() => Model.ConfirmPassword)" />
                     </div>
                     <div class="input-group">
                         <div class="col-xs-6">
                             <button class="btn btn-block bg-pink waves-effect"
                                     type="button"
                                     onclick="@SubmitForm">
-                                ĐĂNG NHẬP
+                                Sign up
                             </button>
                         </div>
                     </div>
@@ -59,8 +72,9 @@
 
     private async Task SubmitForm()
     {
-        var response = await Http.PostJsonAsync<TokenViewModel>("api/Authorize/Login", Model);
 
+        var response = await Http.PostJsonAsync<TokenViewModel>("api/Authorize/Registration", Model);
+        UriHelper.NavigateTo("/");
         Console.WriteLine(response);
     }
 
